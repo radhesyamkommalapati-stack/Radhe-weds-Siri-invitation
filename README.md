@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radhe & Siri — Wedding Invitation</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-burgundy: #b3385a;
+            --elegant-gold: #B79B40;
+            --deep-orange: #f97316;
+            --burnt-orange: #B13401;
+            --text-dark: #3e3935;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #fdfcf9;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .font-script { font-family: 'Great Vibes', cursive; }
+        .font-serif-display { font-family: 'Playfair Display', serif; }
+        .font-body { font-family: 'Cormorant Garamond', serif; }
+
+        /* Animation Overlays */
+        .petal {
+            position: absolute;
+            color: #fbcfe8;
+            pointer-events: none;
+            z-index: 40;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Smooth reveal transitions */
+        .fade-out {
+            opacity: 0 !important;
+            transform: scale(1.1);
+            pointer-events: none;
+            transition: all 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        /* Canvas Scratch effect container constraints */
+        canvas {
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+
+    <audio id="weddingSong" loop>
+        <source src="https://kabir-weds-diksha.site/assets/weddingsong-DqLsY-0C.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="envelopeCover" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-[#a8bfa2] via-[#c8d5b9] to-[#a8bfa2]">
+        <div class="absolute top-8 left-8 text-6xl opacity-20">🌸</div>
+        <div class="absolute top-8 right-8 text-6xl opacity-20">🌸</div>
+        <div class="absolute bottom-8 left-8 text-6xl opacity-20">🌿</div>
+        <div class="absolute bottom-8 right-8 text-6xl opacity-20">🌿</div>
+        
+        <div class="relative h-screen w-full flex items-center justify-center p-4">
+            <img src="https://kabir-weds-diksha.site/assets/envelope2-rrOoymnG.jpeg" id="envelopeImg" class="h-full py-4 object-contain rounded-2xl md:rounded-xl shadow-2xl">
+            
+            <button onclick="openInvitation()" id="openBtn" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 mt-2 flex items-center justify-center cursor-pointer hover:scale-110 hover:rotate-6 active:scale-95 transition-all duration-300 z-30">
+                <img src="https://kabir-weds-diksha.site/assets/button-CrsgPsuz.png" alt="Open" class="w-full h-full object-contain">
+            </button>
+
+            <div id="coverText" class="absolute top-[65%] left-1/2 -translate-x-1/2 text-center px-4 w-full">
+                <h2 class="font-script text-4xl md:text-5xl text-[#3e3935] drop-shadow-md">You’re Invited</h2>
+                <p class="font-body text-lg md:text-xl text-[#3e3935]/80 mt-4 tracking-wide">Tap to open your invitation</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContent" class="opacity-0 transition-opacity duration-1000" style="display: none;">
+
+        <section class="min-h-screen relative overflow-hidden flex flex-col items-center justify-start pt-16 md:pt-24 bg-cover bg-top bg-no-repeat" style="background-image: url('https://kabir-weds-diksha.site/assets/main_section-CXAGbi6Z.png');">
+            <div id="petalContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+            
+            <div class="relative z-30 text-center px-6 w-full max-w-xl mx-auto">
+                <img src="https://kabir-weds-diksha.site/assets/ganeshji-kHN3fgWp.png" alt="Ganesha" class="mx-auto w-16 mb-2">
+                <h1 class="text-sm md:text-xl tracking-wide mb-4 text-black font-semibold">|| Shree Ganeshaya Namah ||</h1>
+                
+                <p class="text-black/80 text-sm md:text-lg mb-1">With the blessings Of</p>
+                <p class="text-black text-base md:text-xl font-serif-display mb-1">Smt. Jayabala & Shri. Subba Rao</p>
+                <p class="text-black text-base md:text-xl font-serif-display mb-1">Smt. Vijaya Lakshmi & Shri. Srinivasa Rao</p>
+                
+                <p class="text-sm md:text-lg text-black tracking-wide mb-1">Cordially invite you to attend the</p>
+                <p class="text-sm md:text-lg text-black tracking-wide mb-6">Wedding of their son</p>
+                
+                <div class="my-4">
+                    <h2 class="text-5xl md:text-7xl text-[var(--primary-burgundy)] drop-shadow-lg font-script">Radhe</h2>
+                    <p class="text-lg font-semibold text-black my-1">WITH</p>
+                    <h2 class="text-5xl md:text-7xl text-[var(--primary-burgundy)] drop-shadow-lg font-script">Siri</h2>
+                </div>
+                
+                <p class="text-sm md:text-lg text-black tracking-wide font-semibold mt-6">Daughter of Smt. Vijaya Lakshmi & Shri Srinivasa Rao</p>
+                <p class="text-lg md:text-2xl text-black tracking-wide font-bold mt-4 text-[var(--primary-burgundy)] font-serif-display">26 and 27th August 2026</p>
+                <p class="text-sm md:text-lg text-black font-semibold mt-1">at <span class="font-bold">Chilakaluripeta</span></p>
+            </div>
+
+            <div class="absolute bottom-0 left-0 w-full h-48 pointer-events-none z-20">
+                <img src="https://kabir-weds-diksha.site/assets/dancer7-CxqnVLnh.png" class="absolute bottom-32 left-4 w-14 md:w-24 opacity-80">
+                <img src="https://kabir-weds-diksha.site/assets/dancer8-DLrAVB_Q.png" class="absolute bottom-16 left-[20%] w-16 md:w-24 opacity-80">
+                <img src="https://kabir-weds-diksha.site/assets/dancer6-BgYehBrP.png" class="absolute bottom-12 left-[38%] w-16 md:w-24 opacity-80">
+                <img src="https://kabir-weds-diksha.site/assets/dancer1-mp2-TDXs.png" class="absolute bottom-4 left-[55%] w-14 md:w-24 opacity-80">
+                <img src="https://kabir-weds-diksha.site/assets/dancer4-DgnGFgQE.png" class="absolute bottom-2 right-[25%] w-16 md:w-24 opacity-80">
+                <img src="https://kabir-weds-diksha.site/assets/dancer2-Bn_2k0hM.png" class="absolute bottom-4 right-[12%] w-14 md:w-24 opacity-80">
+                <img src="https://kabir-weds-diksha.site/assets/dancer3-CXrnIJ5V.png" class="absolute bottom-4 right-[2%] w-16 md:w-24 opacity-80">
+            </div>
+        </section>
+
+        <section class="min-h-screen py-16 px-6 md:px-16 flex flex-col items-center justify-center bg-[#FAF7EE]">
+            <div class="max-w-6xl w-full flex flex-col md:flex-row items-center gap-10">
+                
+                <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
+                    <h2 class="text-[var(--elegant-gold)] text-xl md:text-2xl mb-2 font-semibold">With immense joy and love</h2>
+                    <h2 class="text-6xl md:text-7xl text-[var(--elegant-gold)] font-script mb-6">Siri & Radhe</h2>
+                    
+                    <div class="relative w-full max-w-sm mx-auto md:mx-0 mb-8 shadow-xl rounded-xl overflow-hidden border border-white/40">
+                        <div class="bg-white/70 backdrop-blur-md p-6 text-center">
+                            <p class="text-3xl font-bold text-[var(--elegant-gold)] font-script">27 August 2026</p>
+                            <p class="text-sm text-gray-500 mt-1 font-semibold">Main Ceremony Date</p>
+                        </div>
+                        <canvas id="scratchCanvas" class="absolute inset-0 w-full h-full cursor-pointer z-20"></canvas>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4 w-full max-w-md mx-auto md:mx-0">
+                        <div class="bg-white rounded-xl p-3 shadow-md border border-amber-200 text-center">
+                            <div id="daysBox" class="text-3xl font-bold font-serif-display text-pink-600">00</div>
+                            <div class="text-xs text-gray-500 uppercase font-semibold">Days</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 shadow-md border border-amber-200 text-center">
+                            <div id="hoursBox" class="text-3xl font-bold font-serif-display text-pink-600">00</div>
+                            <div class="text-xs text-gray-500 uppercase font-semibold">Hrs</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 shadow-md border border-amber-200 text-center">
+                            <div id="minutesBox" class="text-3xl font-bold font-serif-display text-pink-600">00</div>
+                            <div class="text-xs text-gray-500 uppercase font-semibold">Mins</div>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 shadow-md border border-amber-200 text-center">
+                            <div id="secondsBox" class="text-3xl font-bold font-serif-display text-pink-600">00</div>
+                            <div class="text-xs text-gray-500 uppercase font-semibold">Secs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2 flex justify-center">
+                    <img src="https://kabir-weds-diksha.site/assets/couple-BgrKK4o8.png" class="w-64 md:w-full max-w-md object-contain animate-pulse">
+                </div>
+            </div>
+        </section>
+
+        <!-- Fixed Absolute Background URL Path -->
+        <section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden bg-cover bg-center" style="background-image: url('https://kabir-weds-diksha.site/assets/bg-d-mehndi-CtXINCtO.png');">
+            <img src="https://kabir-weds-diksha.site/assets/umbrella1-BdeDwzVj.png" class="absolute top-4 left-4 w-28 opacity-40">
+            <img src="https://kabir-weds-diksha.site/assets/dhol-C8y3aRTq.png" class="absolute bottom-4 right-4 w-36">
+            
+            <div class="text-center max-w-md bg-white/20 backdrop-blur-xs p-8 rounded-2xl border border-white/20">
+                <h2 class="text-5xl md:text-6xl text-[var(--deep-orange)] font-script mb-2">Mehendi</h2>
+                <p class="text-base text-[#775A00] font-semibold mb-4">A playful morning of mehendi and cultural festivities</p>
+                <div class="text-[#775A00] text-lg font-semibold space-y-1 mb-4">
+                    <p class="tracking-widest">WEDNESDAY</p>
+                    <p>August <span class="text-[var(--deep-orange)] text-2xl font-script">26</span> 2026</p>
+                    <p>03:30 PM onwards</p>
+                    <p class="font-bold">Thimirthapadu</p>
+                </div>
+                <p class="text-sm font-bold text-[#775A00] border-t border-amber-600/30 pt-4">DRESS CODE</p>
+                <p class="text-xs text-[#775A00]/90 mt-1">Embracing the charm of Andhra culture</p>
+            </div>
+        </section>
+
+        <!-- Fixed Absolute Background URL Path -->
+        <section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden bg-cover bg-center" style="background-image: url('https://kabir-weds-diksha.site/assets/bg-d-wedding2-C3hVFUEz.jpeg');">
+            <img src="https://kabir-weds-diksha.site/assets/sidemala2-DDLEBbLq.png" class="absolute top-0 right-0 w-44 md:w-64">
+            <img src="https://kabir-weds-diksha.site/assets/aag-CUV844_d.png" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-48">
+            
+            <div class="text-center max-w-md bg-white/40 backdrop-blur-xs p-8 rounded-2xl border border-amber-900/10">
+                <h2 class="text-5xl md:text-6xl text-[var(--burnt-orange)] font-script mb-2">Wedding</h2>
+                <p class="text-base text-[#775A00] font-semibold mb-4">The holy union of pheras and eternal promises</p>
+                <div class="text-[#775A00] text-lg font-semibold space-y-1 mb-4">
+                    <p class="tracking-widest">THURSDAY</p>
+                    <p>August <span class="text-[var(--burnt-orange)] text-2xl font-script">27</span> 2026</p>
+                    <p>11:46 PM onwards</p>
+                    <p class="font-bold">Boppudi Kalyanamandapam</p>
+                </div>
+                <p class="text-sm font-bold text-[#775A00] border-t border-amber-900/20 pt-4">DRESS CODE</p>
+                <p class="text-xs text-[#775A00]/90 mt-1">Traditional Ethnic Royalty Dress Profile</p>
+            </div>
+        </section>
+
+        <section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden bg-cover bg-center" style="background-image: url('https://kabir-weds-diksha.site/assets/bg-d-reception-CuFEkLsT.png');">
+            <div class="text-center max-w-md bg-black/30 backdrop-blur-xs p-8 rounded-2xl text-white border border-white/10">
+                <h2 class="text-5xl md:text-6xl text-white font-script mb-2">Reception</h2>
+                <p class="text-base text-white/90 font-semibold mb-4">Celebrate the newly wedded couple over dinner</p>
+                <div class="text-white text-lg font-semibold space-y-1 mb-4">
+                    <p class="tracking-widest">THURSDAY</p>
+                    <p>August <span class="text-white text-2xl font-script">27</span> 2026</p>
+                    <p>07:00 PM onwards</p>
+                    <p class="font-bold">Boppudi Kalyanamandapam</p>
+                </div>
+                <p class="text-sm font-bold text-white/80 border-t border-white/20 pt-4">DRESS CODE</p>
+                <p class="text-xs text-white/70 mt-1">Formal Tuxedos, Indo-Western, and Evening Gowns</p>
+            </div>
+        </section>
+
+        <section class="py-20 px-6 md:px-16 bg-gradient-to-br from-pink-50 via-[#fdfcf9] to-amber-50">
+            <div class="w-full flex justify-center items-center bg-[#d8c2c5] py-8 md:py-12 px-6 rounded-2xl mb-16 shadow-inner">
+                <div class="text-center max-w-4xl">
+                    <h2 class="font-script text-4xl md:text-6xl text-[#b8962e] mb-4">Awaiting Your Noble Presence</h2>
+                    <p class="font-body text-lg md:text-2xl text-[#4b4b3f] leading-relaxed">
+                        Because meeting two souls requires twice the fun and you!
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-12">
+                    <p class="font-body font-bold tracking-widest text-gray-500 mb-2">WITH LOVE</p>
+                    <h2 class="font-script text-5xl md:text-6xl text-[var(--elegant-gold)]">The Families</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-[#F5EFDE] rounded-2xl p-8 shadow-md border border-pink-100 text-center">
+                        <h3 class="font-serif-display font-bold text-2xl text-pink-600 mb-4">Groom's Family</h3>
+                        <div class="w-16 h-0.5 bg-pink-300 mx-auto mb-4"></div>
+                        <div class="space-y-2 font-body text-xl text-gray-700">
+                            <p>Shri. Subba Rao</p>
+                            <p>Smt. Jayabala</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#F5EFDE] rounded-2xl p-8 shadow-md border border-pink-100 text-center">
+                        <h3 class="font-serif-display font-bold text-2xl text-pink-600 mb-4">Bride's Family</h3>
+                        <div class="w-16 h-0.5 bg-pink-300 mx-auto mb-4"></div>
+                        <div class="space-y-2 font-body text-xl text-gray-700">
+                            <p>Shri Srinivasa Rao</p>
+                            <p>Smt. Vijaya Lakshmi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative py-20 px-6 bg-cover bg-center" style="background-image: url('https://kabir-weds-diksha.site/assets/venue_bg-PWdit_Ul.png');">
+            <div class="max-w-6xl mx-auto text-center">
+                <div class="mb-6 text-4xl">📍</div>
+                <h2 class="font-serif-display text-4xl md:text-5xl text-[var(--text-dark)] mb-4">Where We Celebrate</h2>
+                <p id="venueAddr" class="font-body text-lg md:text-xl text-[var(--text-dark)]/70 max-w-2xl mx-auto mb-8 leading-relaxed">
+                    NH-16, Maruthi Nagar, Boppudi Main Rd, Prasananjaneya Kalyanamandapam, Chilakaluripeta, Andhra Pradesh
+                </p>
+
+                <div class="relative max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white mb-8">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3835.795123489813!2d80.1281223758364!3d15.972033641324792!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4a905da6ea4bfb%3A0xe549aa8a6669ff82!2sPrasannanjaneya%20Swamy%20Temple!5e0!3m2!1sen!2sin!4v1715711120008!5m2!1sen!2sin" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+                <a href="https://maps.google.com/?q=Prasannanjaneya+Swamy+Temple,+Boppudi" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#c8a882] to-[#b8986a] text-white rounded-full font-body text-lg shadow-lg hover:scale-105 transition-all duration-300">
+                    Get Directions
+                </a>
+            </div>
+        </section>
+
+        <footer class="py-12 px-6 bg-gradient-to-br from-[#3e3935] to-[#2a2725] text-white text-center">
+            <p class="font-script text-4xl mb-2">Radhe & Siri</p>
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-16 bg-gradient-to-r from-transparent to-[#c8a882]"></div>
+                <span class="text-xl">💐</span>
+                <div class="h-px w-16 bg-gradient-to-l from-transparent to-[#c8a882]"></div>
+            </div>
+            <p class="font-body text-lg opacity-80 mb-1">August 27, 2026</p>
+            <p class="font-body text-sm opacity-60 tracking-widest">#RadheSiriForever</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function openInvitation() {
+            const track = document.getElementById('weddingSong');
+            track.volume = 0.6;
+            track.play().catch(e => console.log("Audio play allowed after click event."));
+
+            document.getElementById('envelopeCover').classList.add('fade-out');
+            
+            // Fixed the display state interaction error
+            const mainContent = document.getElementById('mainContent');
+            mainContent.style.display = 'block';
+            document.body.classList.remove('overflow-hidden');
+            
+            setTimeout(() => {
+                document.getElementById('envelopeCover').remove();
+                mainContent.classList.add('opacity-100');
+                initScratchCard();
+            }, 1000);
+        }
+
+        function spawnPetals() {
+            const container = document.getElementById('petalContainer');
+            if(!container) return;
+            for (let i = 0; i < 25; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.innerText = '🌸';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDelay = Math.random() * 6 + 's';
+                petal.style.animationDuration = 6 + Math.random() * 5 + 's';
+                petal.style.fontSize = 12 + Math.random() * 12 + 'px';
+                container.appendChild(petal);
+            }
+        }
+        setInterval(spawnPetals, 12000);
+        window.addEventListener('DOMContentLoaded', spawnPetals);
+
+        // Updated Countdown object epoch mapping to match your August date profile
+        const targetDate = new Date("August 27, 2026 23:46:00").getTime();
+        function refreshCountdown() {
+            const clearTime = new Date().getTime();
+            const distance = targetDate - clearTime;
+
+            if (distance < 0) return;
+
+            document.getElementById('daysBox').innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById('hoursBox').innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById('minutesBox').innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById('secondsBox').innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+        }
+        setInterval(refreshCountdown, 1000);
+        window.addEventListener('DOMContentLoaded', refreshCountdown);
+
+        function initScratchCard() {
+            const canvas = document.getElementById('scratchCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const parent = canvas.parentElement;
+            
+            canvas.width = parent.offsetWidth;
+            canvas.height = parent.offsetHeight;
+
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#fbbf24');
+            grad.addColorStop(1, '#d97706');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = '24px Cormorant Garamond, serif';
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Scratch to Reveal Date', canvas.width / 2, canvas.height / 2);
+
+            let isDrawing = false;
+
+            function scratch(e) {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 24, 0, Math.PI * 2);
+                ctx.fill();
+                checkScratchPercentage();
+            }
+
+            function checkScratchPercentage() {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                let clearedPixels = 0;
+                for (let i = 3; i < imgData.data.length; i += 4) {
+                    if (imgData.data[i] === 0) clearedPixels++;
+                }
+                if (clearedPixels / (imgData.data.length / 4) > 0.5) {
+                    canvas.style.opacity = '0';
+                    setTimeout(() => canvas.remove(), 400);
+                }
+            }
+
+            canvas.addEventListener('mousedown', () => isDrawing = true);
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('touchstart', () => isDrawing = true);
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', scratch);
+        }
+    </script>
+</body>
+</html>
